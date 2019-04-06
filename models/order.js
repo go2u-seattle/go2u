@@ -8,15 +8,30 @@ var orderCollectionName = 'order-collection';
 var orderModelName = 'orderModel';
 
 var orderSchema = mongoose.Schema({
-    name: {
+    orderId: {
         type: String,
         required: true
+    },
+    userId: {
+        type: String,
+        required: true
+    },
+    goerId: {
+        type: String,
+        required: false,
+        default: null
+    },
+    bidId: {
+        type: String,
+        required: false,
+        default: null
+    },
+    fulfilled: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 });
-
-orderSchema.methods.createSchema = function() {
-
-};
 
 var orderModel = mongoose.model(
     orderModelName,
@@ -24,4 +39,4 @@ var orderModel = mongoose.model(
     orderCollectionName
 );
 
-module.exports = orderModel
+module.exports = orderModel;
