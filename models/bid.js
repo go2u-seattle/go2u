@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 
 // constants
 var bidCollectionName = 'bid-collection';
-var bidModelname = 'bidModel';
+var bidModelName = 'bidModel';
 var bidExpirationTimeInMilliSeconds = 600000; // 10 minutes in milli seconds.
 var bidDefaultAmountInCents = 0;
 
@@ -35,7 +35,7 @@ var bidSchema = mongoose.Schema({
 });
 
 var bidModel = mongoose.model(
-    bidModelname,
+    bidModelName,
     bidSchema,
     bidCollectionName
 );

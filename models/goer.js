@@ -4,8 +4,8 @@
 var mongoose = require('mongoose');
 
 // constants
-var goerCollectionName = '';
-var goerModelname = '';
+var goerCollectionName = 'goer-collection';
+var goerModelName = 'goerModel';
 
 var goerSchema = mongoose.Schema({
     goerId: {
@@ -19,7 +19,7 @@ var goerSchema = mongoose.Schema({
 });
 
 var goerModel = mongoose.model(
-    goerModelname,
+    goerModelName,
     goerSchema,
     goerCollectionName
 );

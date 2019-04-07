@@ -7,14 +7,21 @@ var mongoose = require('mongoose');
 // modules
 var dbConfigurations = require('./configurations/db');
 var routes = require('./routes/routes');
+var mongooseConnectionOptions = {
+    useCreateIndex: true,
+    useNewUrlParser: true
+};
 
-mongoose.connect(dbConfigurations.connectionString, { useNewUrlParser: true })
-    .catch( err => {
-        console.error('MongoDB connection error');
-        console.error(err);
-    })
-    .finally(() => {
-        if(!err)
+mongoose.connect(
+    dbConfigurations.connectionString,
+    mongooseConnectionOptions,
+    (err) => {
+        if(err)
+        {
+            console.error('MongoDB connection error');
+            console.error(err.message);
+        }
+        else
         {
             console.log('MongoDB connected');
         }

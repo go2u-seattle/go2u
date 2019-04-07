@@ -4,8 +4,8 @@
 var mongoose = require('mongoose');
 
 // constants
-var userCollectionName = '';
-var userModelname = '';
+var userCollectionName = 'user-collection';
+var userModelName = 'userModel';
 
 var userSchema = mongoose.Schema({
     userId: {
@@ -19,8 +19,8 @@ var userSchema = mongoose.Schema({
     }
 });
 
-var userModel = mongoose.Model(
-    userModelname,
+var userModel = mongoose.model(
+    userModelName,
     userSchema,
     userCollectionName
 );
