@@ -19,7 +19,8 @@ Alternately, to quickly try out this repo in the cloud, you can [![Remix on Glit
 # Code Overview
 
 ## Dependencies
-
+- [Joi]
+- [Joi-objectid]
 - [expressjs](https://github.com/expressjs/express) - The server for handling and routing HTTP requests
 - [mongoose](https://github.com/Automattic/mongoose) - For modeling and mapping MongoDB data to javascript 
 - [google](www.google.com) - 

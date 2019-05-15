@@ -1,7 +1,6 @@
 'use strict';
 
 // packages
-const Joi = require('joi');
 var mongoose = require('mongoose');
 
 // constants
@@ -36,6 +35,7 @@ const Bid = mongoose.model(bidModelName, new mongoose.Schema({
 }), bidCollectionName);
 
 function validateBid(bid) {
+    // Joi schema
     const schema = {
       bidId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
       orderId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),

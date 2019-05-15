@@ -10,12 +10,14 @@
 
 
 // modules
-const { Order, validateOrder } = require('../models/order');
+const { Order, validateOrder } = require('./../models/order');
 const uuidv1 = require('uuid/v1');
 
 // Handle get all groups
 exports.getAll = function (req, res) {
     Order.find().sort('_id')
+        .populate('user') // referecing to another document
+        .select('name -_id')
         .then(orders => {
             res.send(orders);
         });
@@ -61,14 +63,17 @@ exports.put = async function (req, res) {
 };
 
 // Handle post
-exports.post = function (req, res) {
+exports.post = async function (req, res) {
     // vallidation 
     const { error } = validateOrder(req.body);
     if (error) return res.status(404).send(error.details[0].message);
-    // var order = new Order(req.body);
+    
+    const user = await user.findById(req.body.userId);
+    if (!user) return res.status(400).send('Invalid User.');
+
     var order = new Order({
         orderId: uuidv1(),
-        userId: 'adfafd', //req.body()
+        user: '5cc4e03d463f9d15554f976c' // user._id
         // OrderId: 'asdfad',  //req.body,
         // bidId: 'asdfadf'
         // fulfilled: false

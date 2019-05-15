@@ -4,6 +4,8 @@
 var express = require('express');
 var mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
 
 
 // modules

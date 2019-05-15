@@ -1,7 +1,6 @@
 'use strict';
 
 // packages
-const Joi = require('joi');
 var mongoose = require('mongoose');
 
 // constants
@@ -36,13 +35,13 @@ const User = mongoose.model(userModelName, new mongoose.Schema({
 
 function validateUser(user) {
     const schema = {
-      userName: Joi.string().min(5).max(20).required(),
-      password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-      userId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-      isGoer: Joi.boolean(),
-      phone: Joi.string().min(9).max(15).required()
+        userName: Joi.string().min(5).max(20).required(),
+        password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+        userId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+        isGoer: Joi.boolean(),
+        phone: Joi.string().min(9).max(15).required()
     };
-  
+
     return Joi.validate(user, schema);
 }
 

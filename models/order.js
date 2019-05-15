@@ -1,24 +1,25 @@
 'use strict';
 
 // packages
-const Joi = require('joi');
 var mongoose = require('mongoose');
 
 // constants
 var orderCollectionName = 'order-collection';
 var orderModelName = 'Order';
 
-const Order = mongoose.model(orderModelName, new mongoose.Schema({
+const orderSchema = new mongoose.Schema({
     orderId: {
         type: String,
         required: true
     },
-    userId: {
-        type: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
-    goerId: {
-        type: String,
+    goer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Goer',
         required: false,
         default: null
     },
@@ -32,19 +33,27 @@ const Order = mongoose.model(orderModelName, new mongoose.Schema({
         required: true,
         default: false
     }
-}), orderCollectionName);
+});
+
+const Order = mongoose.model(orderModelName, orderSchema, orderCollectionName);
 
 function validateOrder(order) {
+    // joi schema 
+    // leave those only elemetns that client can send
     const schema = {
-      OrderId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-      userId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-      goerId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-      bidId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-      fuilfilled: Joi.boolean()
+        OrderId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
+        user: Joi.objectId().required(),
+        //   userId: Joi.string().regex(/^[a-zA-Z0-9]{3,50}$/),
+        goer: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+        bidId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+        fuilfilled: Joi.boolean()
     };
-  
+
     return Joi.validate(order, schema);
 }
+
+// in order use in multiple places
+exports.orderSchema = orderSchema;
 
 exports.Order = Order;
 exports.validateOrder = validateOrder;

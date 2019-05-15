@@ -8,6 +8,7 @@ exports.post = function(req, res) {
   // validation required 
   const { error } = validateUser(req.body);
   if (error) return res.status(404).send(error.details[0].message)
+  
   var user = new User({
     
     userName: 'Yuun Lim',

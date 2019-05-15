@@ -1,7 +1,7 @@
 'use strict';
 
 // packages
-const Joi = require('joi');
+// const Joi = require('joi');
 var mongoose = require('mongoose');
 // constants
 var goerCollectionName = 'goer-collection';
