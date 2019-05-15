@@ -7,6 +7,10 @@ var express = require('express');
 var userController = require('../controllers/user');
 
 var userRouter = express.Router()
-    .get('/', userController.getAll);
+    .get('/', userController.getAll)
+    .get('/:id', userController.getByUserId)
+    .delete('/:id', userController.deleteByUserId)
+    .post('/', userController.post)
+    .put('/:id', userController.put);
 
 module.exports = userRouter;

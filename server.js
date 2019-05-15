@@ -3,6 +3,8 @@
 // package dependencies
 var express = require('express');
 var mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
 
 // modules
 var dbConfigurations = require('./configurations/db');
@@ -32,3 +34,9 @@ var app = express()
     .listen(8000, () =>{
         console.log('Listening on Port 8000.');
     });
+
+// app.use(express.json());
+
+
+
+

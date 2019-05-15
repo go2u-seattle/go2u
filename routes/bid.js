@@ -8,6 +8,10 @@ var bidController = require('../controllers/bid');
 
 var bidRouter = express.Router()
     .get('/goer/:goerid', bidController.getAllBidsByGoerId)
-    .get('/order/:orderId', bidController.getAllBidsByOrderId);
+    .get('/order/:orderId', bidController.getAllBidsByOrderId)
+    .delete('/:id', bidController.deleteById)
+    .post('/', bidController.post)
+    .put('/:id', bidController.put);
+
 
 module.exports = bidRouter;

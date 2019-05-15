@@ -1,13 +1,14 @@
 'use strict';
 
 // packages
+const Joi = require('joi');
 var mongoose = require('mongoose');
 
 // constants
 var orderCollectionName = 'order-collection';
-var orderModelName = 'orderModel';
+var orderModelName = 'Order';
 
-var orderSchema = mongoose.Schema({
+const Order = mongoose.model(orderModelName, new mongoose.Schema({
     orderId: {
         type: String,
         required: true
@@ -31,12 +32,19 @@ var orderSchema = mongoose.Schema({
         required: true,
         default: false
     }
-});
+}), orderCollectionName);
 
-var orderModel = mongoose.model(
-    orderModelName,
-    orderSchema,
-    orderCollectionName
-);
+function validateOrder(order) {
+    const schema = {
+      OrderId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+      userId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+      goerId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+      bidId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+      fuilfilled: Joi.boolean()
+    };
+  
+    return Joi.validate(order, schema);
+}
 
-module.exports = orderModel;
+exports.Order = Order;
+exports.validateOrder = validateOrder;

@@ -1,13 +1,13 @@
 'use strict';
 
 // packages
+const Joi = require('joi');
 var mongoose = require('mongoose');
-
 // constants
 var goerCollectionName = 'goer-collection';
 var goerModelName = 'goerModel';
 
-var goerSchema = mongoose.Schema({
+const Goer = mongoose.model(goerModelName, new mongoose.Schema({
     goerId: {
         type: String,
         required: true
@@ -16,12 +16,15 @@ var goerSchema = mongoose.Schema({
         type: String,
         required: true
     }
-});
+}), goerCollectionName);
 
-var goerModel = mongoose.model(
-    goerModelName,
-    goerSchema,
-    goerCollectionName
-);
+function validateGoer(goer) {
+    const schema = {
+      goerId: Joi.string().min(5).max(20).required(),
+      userId: Joi.string().min(5).max(20).required(),
+    };
+    return Joi.validate(goer, schema);
+}
 
-module.exports = goerModel;
+exports.Goer = Goer;
+exports.validateGoer = validateGoer;

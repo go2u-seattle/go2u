@@ -7,6 +7,10 @@ var express = require('express');
 var goerController = require('../controllers/goer');
 
 var goerRouter = express.Router()
-    .get('/', goerController.getAll);
+    .get('/', goerController.getAll)
+    .get('/:id', goerController.getById) // goerId or userId?
+    .delete('/:id', goerController.deleteById)
+    .post('/', goerController.post)
+    .put('/:id', goerController.put);
 
 module.exports = goerRouter;
