@@ -3,52 +3,63 @@
 // packages
 // const Joi = require('joi');
 var mongoose = require('mongoose');
+const Joi = require('joi');
+const uuidv1 = require('uuid/v1');
+
 // constants
 var goerCollectionName = 'goer-collection';
 var goerModelName = 'Goer';
 // const totalAvailableOrder = 5;  // temporary, in need of a change after discuss.
 
-var VehicleEnum = {
-    WALKING: 1,
-    BIKE: 2,
-    MOTORCYCLE: 3,
-    CAR: 4,
-    TRUCK: 5,
-    VAN: 6,
-    BUS: 7
-}
+// var VehicleEnum = {
+//     WALKING: "Walking",
+//     BIKE: "Bike",
+//     MOTORCYCLE: "Motorcycle",
+//     CAR: "Car",
+//     TRUCK: "Truck",
+//     VAN: "Van",
+//     BUS: "Bus"
+// }
+
+var VehicleEnum = ["Walking","Bike", "Motorcycle","Car","Truck","Van","Bus"];
+
 const Goer = mongoose.model(goerModelName, new mongoose.Schema({
-    goerId: {
+    _id: {
         type: String,
-        required: true
+        default: uuidv1()
     },
     userId: {
         type: String,
+        // type: String,
+        ref: 'User',
         required: true
     },
     ongoingOrderCount: {
         type: Number,
         required: false,
-        default: 0
+        default: 0,
+        max: 5
     },
     averageStars: {
         Type: Number,
         default: 0
     },
-    review: {
-
-    },
+    review: String,
     vehicleType: {
-        type: VehicleEnum
+        type: String,
+        required: true
     }
 
 }), goerCollectionName);
 
 function validateGoer(goer) {
     const schema = {
-      goerId: Joi.string().min(5).max(20).required(),
-      userId: Joi.string().min(5).max(20).required(),
-      vehicleType: Joi.VehicleEnum().required()
+      _id: Joi.string(),
+      userId: Joi.string().min(5).max(50).required(),
+      ongoingOrderCount: Joi.number().positive().max(5),
+      averageStars: Joi.number().positive().default(0).max(5),
+      review: Joi.string().max(100),
+      vehicleType: Joi.any().valid(VehicleEnum).required()
     };
     return Joi.validate(goer, schema);
 }

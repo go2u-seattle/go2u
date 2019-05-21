@@ -2,7 +2,7 @@
 
 // packages
 var mongoose = require('mongoose');
-
+const Joi = require('joi');
 // constants
 var orderCollectionName = 'order-collection';
 var orderModelName = 'Order';
@@ -85,8 +85,8 @@ function validateOrder(order) {
     // joi schema 
     // leave those only elemetns that client can send
     const schema = {
-        OrderId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
-        user: Joi.objectId().required(),
+        OrderId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+        // user: Joi.objectId().required(),
         //   userId: Joi.string().regex(/^[a-zA-Z0-9]{3,50}$/),
         goer: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
         bidId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),

@@ -10,7 +10,7 @@ var bidExpirationTimeInMilliSeconds = 600000; // 10 minutes in milli seconds.
 var bidDefaultAmountInCents = 0;
 
 const Bid = mongoose.model(bidModelName, new mongoose.Schema({
-    bidId: {
+    bidId: { 
         type: String,
         required: true
     },
@@ -48,7 +48,9 @@ function validateBid(bid) {
       orderId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
       goerId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
       amountInCents: Joi.number().double().min(0).max(100).required(),
-      expiresAt: Joi.date().format('YYYY-MM-DD').options({ convert: false})
+      createdDate: Joi.date().format('YYYY-MM-DD').options({ convert: false}),
+      isConfirmed: Joi.Boolean(),
+      isAvailable: Joi.Boolean()
     };
   
     return Joi.validate(bid, schema);

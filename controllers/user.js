@@ -1,92 +1,94 @@
 'use strict';
 
 // modules
-const {User, validateUser} = require('../models/user');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const _ = require('lodash');
+const { User, validate } = require('../models/user');
+const uuidv1 = require('uuid/v1');
 
 // Handle post
-exports.post = function(req, res) {
+exports.post = async function (req, res) {
   // validation required 
-  const { error } = validateUser(req.body);
-  if (error) return res.status(404).send(error.details[0].message)
+  const { error } = validate(req.body);
+  if (error) return res.status(404).send(error.details[0].message);
+
+  // make sure user is not already registerd.
+  let user = await User.findOne({ email: req.body.email });
+  if (user) return res.status(404).send('Uesr already registered');
   
-  var user = new User({
-    
-    userName: 'Yuun Lim',
-    password: '1234abcd',
-    userId: 'yuun123',
-    isGoer: true,
-    phone: '123-123-1234'
+  user = new User({
+    _id: uuidv1(),
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    phone: req.body.phone,
+    loginType: req.body.loginType,
+    profilePciture: req.body.profilePciture
+  });
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt); // use await because we want to use promise
 
-    // userName: req.body.userName,
-    // password: req.body.password,
-    // userId: req.body.userId,
-    // isGoer: req.body.isGoer,
-    // phone: req.body.phone
-  }).save();
-  res.status(201).send(user);
+  await user.save();
+  res.send(_.pick(user, ['_id', 'name', 'email']));
 };
-
 
 // Handle get all users
-exports.getAll = function(req, res) {
+/*
+  To do: we need decide which properties we want to return to the client.
+*/
+exports.getAll = async function (req, res) {
   // we may use name to sort
-  User.find().sort('_id')
-    .then( users => {
-      res.send(users)
-    });
+  let users = await User.find().sort('_id')
+  if (!users) return res.status(404).send('No users');
+  users = users.map(user => {
+    const _user = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      // userId: user.userId
+    }
+    return user;
+  })
+  res.send(users);
 };
 
-// Handle get by userId
-exports.getByUserId = async function(req, res) {
-  const user = await User.findById(req.params.id);
+// Handle get by userId 
+/*
+  To do:
+  1. we need decide which properties we want to return to the client.
+  2. find by userId in the req.body
+*/
+exports.getByUserId = async function (req, res) {
+  let user = await User.findById(req.params.id);
   if (!user) return res.status(404).send('The User with the given ID is not found');
-  res.send(user);
-
-  // User.findById(req.params.id)
-  //   .then(function(user) {
-  //     if  (!user) { return res.status(404).send("the User with the given Id not Found");}
-  //     res.send(user);
-  //   })
-  //   .catch('Not found ');
+  res.send(_.pick(user, ['_id', 'name', 'email']));
 };
 
 // Handle queries 
 // with id?
-exports.query = function(req, res) {
+exports.query = function (req, res) {
 
 };
 
-// Handle delete By user id
-exports.deleteByUserId = async function(req, res) {
-
+// Handle delete By userId
+exports.deleteByUserId = async function (req, res) {
   const user = await User.findByIdAndRemove(req.params.id);
-  if (!user) return res.statsu(404).send('The user with the given ID was not found)');
+  if (!user) return res.status(404).send('The user with the given ID was not found)');
   res.send(user);
-
-  // // look up the user with id
-  // // not existing, return 404
-  // User.findOneAndRemove({ _id : req.params.id }, (err, user) => {
-  //   if (err) {
-  //     return res.status(404).send('User with the given id not found');
-  //   }
-  //     console.log('deleting');
-  //     User.deleteOne( { userId: req.params.id} );
-  //     res.status(200).send('Sucessfully deleted');
-  // });
-
 };
 
 // Handle put
-exports.put = async function(req, res) {
+exports.put = async function (req, res) {
   const { error } = validateUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const user = await User.findByIdAndUpdate(req.params.id,
     {
       userName: "Tom"
-    }, {new: true});
-    // { name: req.body.userName }, 
-    
+    }, { new: true });
+  // { name: req.body.userName }, 
+
   if (!user) return res.status(404).send('User with the given ID not found');
   res.send(user);
 }

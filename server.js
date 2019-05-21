@@ -20,20 +20,21 @@ mongoose.connect(
     dbConfigurations.connectionString,
     mongooseConnectionOptions,
     (err) => {
-        if(err)
-        {
+        if (err) {
             console.error('MongoDB connection error');
             console.error(err.message);
         }
-        else
-        {
+        else {
             console.log('MongoDB connected');
         }
     });
 
 var app = express()
+    .use(bodyParser.urlencoded({ extended: false }))
+    .use(bodyParser.json())
     .use('/', routes)
-    .listen(8000, () =>{
+
+    .listen(8000, () => {
         console.log('Listening on Port 8000.');
     });
 
