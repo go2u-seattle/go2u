@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 
 // constants
 var bidCollectionName = 'bid-collection';
-var bidModelName = 'bidModel';
+var bidModelName = 'Bid';
 var bidExpirationTimeInMilliSeconds = 600000; // 10 minutes in milli seconds.
 var bidDefaultAmountInCents = 0;
 
@@ -27,10 +27,17 @@ const Bid = mongoose.model(bidModelName, new mongoose.Schema({
         required: true,
         default: bidDefaultAmountInCents
     },
-    expiresAt: {
+    createdDate: {
         type: Date,
         default: Date.now,
         expires: bidExpirationTimeInMilliSeconds
+    },
+    isConfirmed: {
+        type: Boolean,
+        default: false
+    },
+    isAvailable: { // ttl becomes false
+        type: Boolean,  
     }
 }), bidCollectionName);
 
@@ -48,4 +55,4 @@ function validateBid(bid) {
 }
 
 exports.Bid = Bid;
-exports.validateBid = validateBid;
+exports.validate = validateBid;

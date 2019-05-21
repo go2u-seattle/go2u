@@ -8,15 +8,16 @@ var userCollectionName = 'user-collection';
 var userModelName = 'User';
 
 const User = mongoose.model(userModelName, new mongoose.Schema({
+    // userId: {
+    //     type: String,
+    //     require: true
+    // },    // either guid or token
+    
     userName: {
         type: String,
         require: true
     },
     password: {
-        type: String,
-        require: true
-    },
-    userId: {
         type: String,
         require: true
     },

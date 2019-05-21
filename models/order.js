@@ -7,6 +7,10 @@ var mongoose = require('mongoose');
 var orderCollectionName = 'order-collection';
 var orderModelName = 'Order';
 
+var DeliveryEnum = {
+    
+}
+
 const orderSchema = new mongoose.Schema({
     orderId: {
         type: String,
@@ -17,22 +21,62 @@ const orderSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    goer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Goer',
-        required: false,
-        default: null
+    // goer: { // need more clarification
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Goer',
+    //     required: false,
+    //     default: null
+    // },
+    // bidId: {
+    //     type: String,
+    //     required: false,
+    //     default: null
+    // },
+    origin: {
+        address: {
+
+        },
+        contact_Info: {
+
+        },
+        isPickedUp: Boolean,
+        pickedUpTime: {
+            type: Date
+        }
     },
-    bidId: {
-        type: String,
-        required: false,
-        default: null
+    Destination: {
+        address: {
+
+        },
+        contact_Info: {
+
+        },
+        isDroppedOff: Boolean,
+        droppedOffTime: {
+            type: Date
+        },
+        confirmationImage: {
+            type: String // url
+        },
+        receivedIdConfirmed: {
+            type: Boolean
+        }
     },
-    fulfilled: {
-        type: Boolean,
-        required: true,
-        default: false
-    }
+    item: {
+        itemName: String,
+        itemDescription: String,
+        image: String,
+        itemSize: String // enum S/M/L
+    },
+    orderDescription: String, 
+    preferredDeliveryMethodType: DeliveryEnum ,// walker/public, sedan, truck (by size)
+    // Date objects
+    orderCreationTime: Date,
+    orderPlacedTime: Date,
+    expirationDate: Date,
+
+    isConfirmed: Boolean,
+    paymentRecordId: String
 });
 
 const Order = mongoose.model(orderModelName, orderSchema, orderCollectionName);
