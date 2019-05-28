@@ -27,7 +27,7 @@ exports.getAll = function (req, res) {
 
 // Handle get by Id
 exports.getById = async function (req, res) {
-    if (!(req.params.id).match(/^[0-9a-fA-F]{24}$/)) {
+    if (!(req.params.id).match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)) {
         // Yes, it's a valid ObjectId, proceed with `findById` call.
         res.status(404).send('Wrong Object ID');
     }
@@ -48,13 +48,13 @@ exports.getById = async function (req, res) {
 // Handle delete by Id
 exports.deleteById = async function (req, res) {
     const order = await Order.findByIdAndRemove(req.params.id);
-    if (!order) return res.status(404).send('The Goer with the given Id Not Found');
+    if (!order) return res.status(404).send('The Order with the given Id Not Found');
     res.send(order);
 };
 
 // Handle put
 exports.put = async function (req, res) {
-    const { error } = validateOrder(req.body);
+    const { error } = validateOrder(req.params.id);
     if (error) return res.status(400).send(error.details[0].message);
     const order = await Order.findByIdAndUpdate(req.params.id,
         {
