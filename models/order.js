@@ -25,7 +25,10 @@ const orderSchema = new mongoose.Schema({
         },
         contact_Info: {
             name: String,
-            phone: String,
+            phone: {
+                number: String,
+                isVerified: Boolean
+            },
         },
         isPickedUp: Boolean,
         pickedUpTime: {
@@ -39,7 +42,10 @@ const orderSchema = new mongoose.Schema({
         },
         contact_Info: {
             name: String,
-            phone: String,
+            phone: {
+                number: String,
+                isVerified: Boolean
+            },
         },
         isDroppedOff: Boolean,
         droppedOffTime: {
@@ -79,7 +85,7 @@ function validateOrder(order) {
 
     const contactInfoSchema = Joi.object({
         name: Joi.string(),
-        phoen: phoneSchema
+        phone: phoneSchema
     });
 
     const originAddressSchema = Joi.object({
@@ -107,7 +113,7 @@ function validateOrder(order) {
 
     const schema = {
         _id: Joi.string(),
-        userId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+        userId: Joi.string(),
         origin: originAddressSchema,
         destination: destinationAddressSchema,
         item: itemSchema,

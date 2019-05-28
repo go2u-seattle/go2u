@@ -18,7 +18,6 @@ const uuidv1 = require('uuid/v1');
 exports.getAll = function (req, res) {
     Order.find().sort('_id')
         .populate('user') // referecing to another document
-        .select('name -_id')
         .then(orders => {
             res.send(orders);
         });
@@ -48,9 +47,9 @@ exports.getById = async function (req, res) {
 
 // Handle delete by Id
 exports.deleteById = async function (req, res) {
-  const order = await Order.findByIdAndRemove(req.params.id);
-  if (!order) return res.status(404).send('The Goer with the given Id Not Found');
-  res.send(order);
+    const order = await Order.findByIdAndRemove(req.params.id);
+    if (!order) return res.status(404).send('The Goer with the given Id Not Found');
+    res.send(order);
 };
 
 // Handle put
@@ -70,18 +69,26 @@ exports.post = async function (req, res) {
     // vallidation input 
     const { error } = validateOrder(req.body);
     if (error) return res.status(404).send(error.details[0].message);
-    
-    const user = await User.findOne(req.body.userId);
+
+    const user = await User.findById(req.body.userId);
     if (!user) return res.status(400).send('Invalid User.');
 
     // check available order count'
     // transaction? 
+    if (user.onGoingOrderCount < 5) {
+
+    } else {
+
+    }
     var order = new Order({
-        orderId: uuidv1(),
-        user: user._id
-        // OrderId: 'asdfad',  //req.body,
-        // bidId: 'asdfadf'
-        // fulfilled: false
+        _id: uuidv1(),
+        userId: user._id,
+        origin: req.body.origin,
+        destination: req.body.destination,
+        item: req.body.item,
+        orderDescription: req.body.orderDescription,
+        preferredDeliveryMethodType: req.body.preferredDeliveryMethodType,
+        orderCreationTime: Date.now(),
     }).save();
     res.status(201).send(order);
 };
