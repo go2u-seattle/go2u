@@ -49,7 +49,7 @@ exports.deleteById = async function (req, res) {
 exports.put = async function (req, res) {
   const { error } = validateGoer(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  const goer = await Goer.findByIdAndUpdate(req.params.id,
+  const goer = await Goer.findByIdAndUpdate(req.body._id,
     {
       goerId: '1231231231'
     }, { new: true });

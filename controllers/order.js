@@ -11,7 +11,7 @@
 
 // modules
 const { Order, validateOrder } = require('./../models/order');
-const User = require('./../models/user');
+const { User } = require('./../models/user');
 const uuidv1 = require('uuid/v1');
 
 // Handle get all groups
@@ -23,6 +23,8 @@ exports.getAll = function (req, res) {
             res.send(orders);
         });
 };
+
+// order might be requested by goer and user.
 
 // Handle get by Id
 exports.getById = async function (req, res) {
@@ -65,16 +67,18 @@ exports.put = async function (req, res) {
 
 // Handle post
 exports.post = async function (req, res) {
-    // vallidation 
+    // vallidation input 
     const { error } = validateOrder(req.body);
     if (error) return res.status(404).send(error.details[0].message);
     
-    const user = await User.findById(req.body.userId);
+    const user = await User.findOne(req.body.userId);
     if (!user) return res.status(400).send('Invalid User.');
 
+    // check available order count'
+    // transaction? 
     var order = new Order({
         orderId: uuidv1(),
-        user: '5cc4e03d463f9d15554f976c' // user._id
+        user: user._id
         // OrderId: 'asdfad',  //req.body,
         // bidId: 'asdfadf'
         // fulfilled: false

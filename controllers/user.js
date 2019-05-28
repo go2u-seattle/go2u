@@ -80,10 +80,10 @@ exports.deleteByUserId = async function (req, res) {
 
 // Handle put
 exports.put = async function (req, res) {
-  const { error } = validateUser(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const user = await User.findByIdAndUpdate(req.params.id,
+  const user = await User.findByIdAndUpdate(req.body._id,
     {
       userName: "Tom"
     }, { new: true });
