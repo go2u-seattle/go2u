@@ -16,7 +16,7 @@ exports.post = async function (req, res) {
   // make sure user is not already registerd.
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(404).send('Uesr already registered');
-  
+
   user = new User({
     _id: uuidv1(),
     name: req.body.name,
@@ -83,12 +83,15 @@ exports.put = async function (req, res) {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const user = await User.findByIdAndUpdate(req.body._id,
-    {
-      userName: "Tom"
-    }, { new: true });
-  // { name: req.body.userName }, 
-
+  let user = await User.findOne(req.params.id);
   if (!user) return res.status(404).send('User with the given ID not found');
+
+  // only update fields that were actually passed...
+  if (req.body.message !== null) {
+    review.message = req.body.message;
+  }
+  if (req.body.score !== null) {
+    review.score = req.body.score;
+  }
   res.send(user);
 }

@@ -17,7 +17,7 @@ const uuidv1 = require('uuid/v1');
 // Handle get all groups
 exports.getAll = function (req, res) {
     Order.find().sort('_id')
-        .populate('user') // referecing to another document
+        .populate('userId') // referecing to another document
         .then(orders => {
             res.send(orders);
         });
@@ -56,12 +56,12 @@ exports.deleteById = async function (req, res) {
 exports.put = async function (req, res) {
     const { error } = validateOrder(req.params.id);
     if (error) return res.status(400).send(error.details[0].message);
-    const order = await Order.findByIdAndUpdate(req.params.id,
-        {
-            orderId: '1231231231'
-        }, { new: true });
-    if (!order) return res.status(404).send("order with the given ID not found");
-    res.send(order);
+    // const order = await Order.findByIdAndUpdate(req.params.id,
+    //     {
+    //         : '1231231231'
+    //     }, { new: true });
+    // if (!order) return res.status(404).send("order with the given ID not found");
+    // res.send(order);
 };
 
 // Handle post

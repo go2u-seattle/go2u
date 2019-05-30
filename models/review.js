@@ -1,40 +1,48 @@
 'user strict';
 
 var mongoose = require('mongoose');
+const Joi = require('joi');
 
 var reviewCollectionName = 'review-collection';
 var reviewModelName = 'Review';
 
 const reviewSchema = new mongoose.Schema({
-  reviewId: String,
-  goerId: String,
-  userId: String,
-  orderId: String,
+  _id: String,
+  goerId: {
+    type: String,
+    ref: 'Goer'
+  },
+  userId: {
+    type: String,
+    ref: 'User'
+  },
+  orderId: {
+    type: String,
+    ref: "Order"
+  },
   message: String,
-  Score: Number
+  score: Number
 });
 
 const Review = mongoose.model(reviewModelName, reviewSchema, reviewCollectionName);
 
-function validateReview(review) {
-    // joi schema 
-    // leave those only elemetns that client can send
-  const schema = {
-    reviewId: Joi.String(),
-    goerId: Joi.String(),
-    userId: Joi.String(),
-    orderId: Joi.String(),
-    message: Joi.String(),
-    Score: Joi.integer()
-  };
 
+function validateReview(review) {
+  const schema = {
+    _id: Joi.string(),
+    goerId: Joi.string(),
+    userId: Joi.string(),
+    orderId: Joi.string().required(),
+    message: Joi.string(),
+    score: Joi.number()
+  };
   return Joi.validate(review, schema);
 }
 
 // in order use in multiple places
 exports.reviewSchema = reviewSchema;
 exports.Review = Review;
-exports.validateReview = validateReview;
+exports.validate = validateReview;
 
 
 
