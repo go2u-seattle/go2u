@@ -1,24 +1,24 @@
 'user strict';
 
 const uuidv1 = require('uuid/v1');
-const User = require('./../models/user');
-const Goer = require('./../models/goer');
-
-
-
+const { Goer } = require('./../models/goer');
+const { Order } = require('./../models/order');
 
 // modules
 const { Bid, validate} = require('../models/bid');
 
 // Handle get all bids for goerId
-exports.getAllBidsByGoerId = function(req, res) {
-  // populate('goer');
+exports.getAllBidsByGoerId = async function(req, res) {
+  const bids = await Bid.findOne({ goerId: req.body.goerId});
+  if (!bids) return res.status(404).send('No Bids Found with the given goer id.');
+  res.send(bids);
 };
 
 // Handle get all bids for orderId
-exports.getAllBidsByOrderId = function(req, res)
-{
-
+exports.getAllBidsByOrderId = async function(req, res) {
+  const bids = await Bid.findOne({ orderId: req.body.orderId});
+  if (!bids) return res.status(404).send('No Bids Found with the given goer id.');
+  res.send(bids);
 };
 
 // Handle delete delete bid by Id
@@ -35,33 +35,48 @@ exports.put = function(req, res) {
 
 // handle Post
 exports.post = async function(req, res) {
-  // to make sure we have given goer Id.
+  // to make sure we have right format of input;
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  console.log("Bid Shcema Validation done");
 
-  
+  // validate whoever wants to throw a review.
+  const goer = await Goer.findOne({ _id: req.body.goerId });
+  if (!goer) return res.status(404).send('Goer with the given ID Not Found');
+  console.log("Goer Validation done");
 
-  // to make sure we have given user Id.
+  // make sure order exists.
+  const order = await Order.findOne({ _id: req.body.orderId });
+  if (!order) return res.status(404).send('Order with the given ID Not Found');
+  console.log("Order Validation done");
 
-  // to make sure we have given order Id.
+  // make sure the goer hasn't thrown the bid yet.
+  // if (checkDuplicate(goer._id, order._id)) {
+  //   return res.status(404).send("Bid for this order already made by the goer.");
+  // } 
+  var bid = await Bid.findOne({ goerId: goer._id});
+  if (bid) {
+    return ㅗ고res.status(400).send("Bid for this order already made by the goer.");
+  }
+  console.log("Bid Validation done");
 
+  // make sure the goer hasn't thrown over 5 bids. 
+  if (goer.ongoingOrderCount >= 5) {
+    return res.status(400).send("No more avaiable bid allowed.");
+  }
+  console.log("goer's total bid number Validation done");
 
-  // var bid = new Bid({
-  //   bidId: uuidv1(),
-  //   orderId: 
-  // })
-  // create a bid from req.body
-
-  // send back with res
-
-    // to make sure we have given email.
-    const { error } = validate(req.body); 
-    if (error) return res.status(400).send(error.details[0].message);
-  
-    // make sure user is not already registered.
-    let user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(400).send('Invliad email or password');
-    
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) return res.status(400).send('Invliad email or password');
-  
-    res.send(true);
+  bid = new Bid({
+    _id: uuidv1(),
+    orderId: order._id,
+    goerId: goer._id,
+    amountInCents: req.body.amountInCents,
+    createdDate: Date.now()
+  });
+  await bid.save();
+  goer.ongoingOrderCount = goer.ongoingOrderCount + 1;
+  goer.save();
+  res.send(bid);
 }
+
+

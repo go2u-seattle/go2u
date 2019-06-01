@@ -2,6 +2,7 @@
 
 // packages
 var mongoose = require('mongoose');
+const Joi = require('joi');
 
 // constants
 var bidCollectionName = 'bid-collection';
@@ -10,7 +11,7 @@ var bidExpirationTimeInMilliSeconds = 600000; // 10 minutes in milli seconds.
 var bidDefaultAmountInCents = 0;
 
 const Bid = mongoose.model(bidModelName, new mongoose.Schema({
-    bidId: { 
+    _id: { 
         type: String,
         required: true
     },
@@ -42,17 +43,15 @@ const Bid = mongoose.model(bidModelName, new mongoose.Schema({
 }), bidCollectionName);
 
 function validateBid(bid) {
-    // Joi schema
     const schema = {
-      bidId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-      orderId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-      goerId: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-      amountInCents: Joi.number().double().min(0).max(100).required(),
-      createdDate: Joi.date().format('YYYY-MM-DD').options({ convert: false}),
-      isConfirmed: Joi.Boolean(),
-      isAvailable: Joi.Boolean()
+      _id: Joi.string(),
+      orderId: Joi.string(),
+      goerId: Joi.string(),
+      amountInCents: Joi.number().min(0).max(100).required(),
+      createdDate: Joi.date(), //.format('YYYY-MM-DD').options({ convert: false}),
+      isConfirmed: Joi.boolean(),
+      isAvailable: Joi.boolean()
     };
-  
     return Joi.validate(bid, schema);
 }
 

@@ -69,10 +69,17 @@ exports.post = async function (req, res) {
   const order = await Order.findOne({ _id: req.body.orderId });
   if (!order) return res.status(404).send('Order with the given ID Not Found');
   console.log("Order Validation done");
-  if (checkDuplicate(order._id)) {
+
+  // if (checkDuplicate(order._id)) {
+  //   return res.status(404).send("Review for this order already created.");
+  // }
+
+  var review = await Review.findOne({ goerId: goer._id });
+  if (review) {
     return res.status(404).send("Review for this order already created.");
   }
-  const review = new Review({
+
+  review = new Review({
     _id: uuidv1(),
     goerId: goer._id,
     orderId: order._id,
@@ -86,6 +93,7 @@ exports.post = async function (req, res) {
 
 function checkDuplicate(orderId) {
   let review = Review.findOne({ orderId: orderId });
+  console.log(review);
   if (review) {
     return true;
   }

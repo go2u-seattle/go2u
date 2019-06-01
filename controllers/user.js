@@ -83,15 +83,17 @@ exports.put = async function (req, res) {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let user = await User.findOne(req.params.id);
+  let user = await User.findOne({ _id: req.params.id });
   if (!user) return res.status(404).send('User with the given ID not found');
 
+  user.isGoer = true;
   // only update fields that were actually passed...
-  if (req.body.message !== null) {
-    review.message = req.body.message;
-  }
-  if (req.body.score !== null) {
-    review.score = req.body.score;
-  }
+  // if (req.body.message !== null) {
+  //   review.message = req.body.message;
+  // }
+  // if (req.body.score !== null) {
+    // }
+    //   review.score = req.body.score;
+  await user.save();
   res.send(user);
 }

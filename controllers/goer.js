@@ -51,7 +51,7 @@ exports.put = async function (req, res) {
   if (error) return res.status(400).send(error.details[0].message);
   const goer = await Goer.findByIdAndUpdate(req.body._id,
     {
-      goerId: '1231231231'
+      isGoer: true
     }, { new: true });
   if (!goer) return res.status(404).send("Goer with the given ID not found");
   res.send(goer);
@@ -66,7 +66,7 @@ exports.post = async function (req, res) {
   const user = await User.findOne({ _id:req.body.userId});
   if (!user) return res.status(404).send('User with the given ID Not Found');
 
-  let goer = await Goer.findOne({ _id:req.body.userId});
+  let goer = await Goer.findOne({ userId:req.body.userId});
   if (goer) return res.status(404).send('Goer already regiestered');
 
   // let _vehicelType = req.body.vehicleType;
@@ -76,6 +76,8 @@ exports.post = async function (req, res) {
     userId: user._id,
     vehicleType: req.body.vehicleType
   });
-  await goer.save();  
+  await goer.save(); 
+  user.isGoer = true;
+  user.save(); 
   res.send(goer);
 };

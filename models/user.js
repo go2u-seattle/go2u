@@ -86,7 +86,7 @@ function validateUser(user) {
   const schema = {
     _id: Joi.string(), //.regex(/^[a-zA-Z0-9]{3,50}$/),
     name: nameSchema,
-    email: Joi.string().email().required(),
+    email: Joi.string().email(),
     password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
     isGoer: Joi.boolean(),
     phone: phoneSchema,
