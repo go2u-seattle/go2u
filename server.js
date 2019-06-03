@@ -2,6 +2,9 @@
 
 // package dependencies
 const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+var io = require('socket.io')(http);
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const Joi = require('joi');
@@ -29,12 +32,10 @@ mongoose.connect(
         }
     });
 
-var app = express()
-    .use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }))
     .use(bodyParser.json())
-    .use('/', routes)
-
-    .listen(8000, () => {
+    .use('/', routes);
+http.listen(8000, () => {
         console.log('Listening on Port 8000.');
     });
 
