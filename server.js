@@ -18,6 +18,7 @@ var mongooseConnectionOptions = {
     useCreateIndex: true,
     useNewUrlParser: true
 };
+var notifier = require('./notification/notifier');
 
 mongoose.connect(
     dbConfigurations.connectionString,
@@ -35,10 +36,12 @@ mongoose.connect(
 app.use(bodyParser.urlencoded({ extended: false }))
     .use(bodyParser.json())
     .use('/', routes);
+
 http.listen(8000, () => {
         console.log('Listening on Port 8000.');
     });
 
+notifier.run(io);
 // app.use(express.json());
 
 
