@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: uuidv1()
   },
+  pushToken: {
+    type: String,
+    default: null
+  },
   name: {
     lastName: String,
     middleName: String,
