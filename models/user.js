@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     default: uuidv1()
   },
   isAdmin: Boolean,
+  pushToken: {
+    type: String,
+    default: null
+  },
   name: {
     lastName: String,
     middleName: String,
