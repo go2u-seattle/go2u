@@ -12,7 +12,7 @@ var messageRoutes = require('./message');
 var paymentInformationRoutes = require('./paymentInformation');
 var paymentRecordRoutes = require('./paymentRecord');
 var reviewRoutes = require('./review');
-
+var authRoutes = require('./auth');
 // set router
 var router = express.Router()
     .use('/order', orderRoutes)
@@ -22,5 +22,7 @@ var router = express.Router()
     .use('/message', messageRoutes)
     .use('/paymentInformation', paymentInformationRoutes)
     .use('/paymentRecord', paymentRecordRoutes)
-    .use('/review', reviewRoutes);    
+    .use('/review', reviewRoutes)  
+    .use('/auth', authRoutes);
+    
 module.exports = router;
