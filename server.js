@@ -41,7 +41,7 @@ http.listen(8000, () => {
         console.log('Listening on Port 8000.');
     });
 
-notifier.run(io);
+await notifier.run(io);
 // app.use(express.json());
 
 

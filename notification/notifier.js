@@ -4,11 +4,11 @@ const redis = require('redis');
 const bid = require('./bid');
 const order = require('./order');
 
-exports.run = function(io) {
+exports.run = async function(io) {
     let redisClient = handleRadisClient();
     // handleSocketConnection(io, redisClient);
-    bid.Notify(io, redisClient);
-    order.Notify(io, redisClient);
+    await bid.Notify(io, redisClient);
+    await order.Notify(io, redisClient);
 }
 
 var handleRadisClient = function(io)
