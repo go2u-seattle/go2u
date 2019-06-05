@@ -1,11 +1,14 @@
 'user strict';
 
 const redis = require('redis');
+const bid = require('./bid');
+const order = require('./order');
 
 exports.run = function(io) {
     let redisClient = handleRadisClient();
-    handleSocketConnection(io, redisClient);
-    console.log('Notifier Running');
+    // handleSocketConnection(io, redisClient);
+    bid.Notify(io, redisClient);
+    order.Notify(io, redisClient);
 }
 
 var handleRadisClient = function(io)
@@ -17,6 +20,7 @@ var handleRadisClient = function(io)
     redisClient.on('conection', function() {
         console.log('Redis Client Connected');
     });
+
     return redisClient;
 }
 

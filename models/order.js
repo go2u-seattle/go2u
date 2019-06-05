@@ -68,6 +68,9 @@ const orderSchema = new mongoose.Schema({
     preferredDeliveryMethodType: String,// walker/public, sedan, truck (by size)
     orderCreationTime: Date,
     orderPlacedTime: Date,
+    orderPickedUpTime: Date,
+    orderDeliveredTime: Date,
+    orderState: String,
     expirationDate: Date,
     isConfirmed: Boolean,
     paymentRecordId: String
@@ -121,6 +124,9 @@ function validateOrder(order) {
         preferredDeliveryMethodType: Joi.string(),// walker/public, sedan, truck (by size)
         orderCreationTime: Joi.date(),
         orderPlacedTime: Joi.date(),
+        orderPickedUpTime: Joi.date(),
+        orderDeliveredTime: Joi.date(),
+        orderState: Joi.string(), // created/confirmed/pickedUp/delivered
         expirationDate: Joi.date(),
         isConfirmed: Joi.boolean(),
         paymentRecordId: Joi.boolean()
