@@ -5,7 +5,7 @@ const pushNotificationHandler = require('./pushNotificationHandler');
 const socketNotificationHandler = require('./socketNotificationHandler');
 
 exports.Notify = async function(io, redisClient) {
-    orderChangeStream.on('change', (change) => {
+    orderChangeStream.on('change', async (change) => {
         var userId = change.fullDocument.userId;
         var message = createMessage(change);
         
