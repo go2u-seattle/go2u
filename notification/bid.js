@@ -16,9 +16,9 @@ exports.Notify = function(io, redisClient) {
 var createMessage = async function(change) {
     var bidId = change.fullDocument.bidId;
     var orderId = change.fullDocument.orderId;
-    var goerId = change.fullDocument.goerId;
+    var userId = change.fullDocument.userId;
     var isConfirmed = change.fullDocument.isConfirmed;
-    var pushToken = await pushNotificationHandler.getPushToken(goerId);
+    var pushToken = await pushNotificationHandler.getPushToken(userId);
 
     var message;
 
