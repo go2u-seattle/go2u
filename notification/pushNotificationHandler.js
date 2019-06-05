@@ -5,12 +5,11 @@ const { User } = require('../models/user');
 
 var expo = new Expo();
 
-exports.pushNotify = async function(userId, message) {
+exports.pushNotify = async function(message) {
     let messages = [];
-    let pushToken = await getPushtoken(userId);
 
-    if (!Expo.isExpoPushToken(pushToken)) {
-        console.error(`Push token ${pushToken} is not a valid Expo push token`)
+    if (!Expo.isExpoPushToken(message.pushToken)) {
+        console.error(`Push token ${messasge.pushToken} is not a valid Expo push token`)
     }
 
     messages.push(message);

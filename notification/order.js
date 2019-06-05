@@ -4,7 +4,7 @@ const orderChangeStream = require('../models/order').Order.watch();
 const pushNotificationHandler = require('./pushNotificationHandler');
 const socketNotificationHandler = require('./socketNotificationHandler');
 
-exports.Notify = async function(io, redisClient) {
+exports.Notify = function(io, redisClient) {
     orderChangeStream.on('change', async (change) => {
         var userId = change.fullDocument.userId;
         var message = createMessage(change);
@@ -17,7 +17,7 @@ exports.Notify = async function(io, redisClient) {
         // if(socketId) {
         //     socketNotificationHandler.Notify(io, socketId);
         // } else {
-            await pushNotificationHandler.pushNotify(userId, message);
+            await pushNotificationHandler.pushNotify(message);
         // }
     });
 }
@@ -40,7 +40,7 @@ var createMessage = async function(change) {
             pushToken = pushToken,
             title = 'Your order has been picked up',
             body = 'Your order has been picked up',
-            data = { targetView :'order', id : orderId}
+            data = { targetView : 'order', id : orderId}
         );
     } else if (orderState === 'delivered' ) {
         message = pushNotificationHandler.createMessage(
