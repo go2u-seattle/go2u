@@ -3,6 +3,9 @@
 // packages
 var mongoose = require('mongoose');
 const Joi = require('joi');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+
 // constants
 var userCollectionName = 'user-collection';
 var userModelName = 'User';
@@ -24,6 +27,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: uuidv1()
   },
+  isAdmin: Boolean,
   pushToken: {
     type: String,
     default: null
@@ -36,7 +40,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
+    unique: true, // to make sure we don't have same users
     default: null
   },
   password: {
@@ -69,9 +73,16 @@ const userSchema = new mongoose.Schema({
   onGoingOrderCount: {
     type: Number,
     default: 0,
+    max: 5,
     required: false
   }
 });
+
+userSchema.methods.generateAuthToken = function() {
+  // we put payload  then second arg is secret key. just hardcoding now put
+  const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('jwtPrivateKey')); // we'ill get a token;
+  return token;
+}
 
 const User = mongoose.model(userModelName, userSchema, userCollectionName);
 

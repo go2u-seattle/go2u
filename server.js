@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
+const config = require('config');
 
 
 // modules
@@ -45,5 +46,7 @@ notifier.run(io);
 // app.use(express.json());
 
 
-
-
+if (!config.get('jwtPrivateKey')) {
+    console.error('FATAL ERROR: jwtPrivateKey is not defined');
+    process.exit(1);
+}

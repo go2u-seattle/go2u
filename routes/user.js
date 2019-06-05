@@ -2,6 +2,9 @@
 
 // packages
 var express = require('express');
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
+
 
 // modules
 var userController = require('../controllers/user');
@@ -9,8 +12,8 @@ var userController = require('../controllers/user');
 var userRouter = express.Router()
     .get('/', userController.getAll)
     .get('/:id', userController.getByUserId)
-    .delete('/:id', userController.deleteByUserId)
-    .post('/', userController.post)
-    .put('/:id', userController.put);
+    .delete('/:id', [auth, admin], userController.deleteByUserId)
+    .post('/', auth, userController.post)
+    .put('/:id', auth, userController.put);
 
 module.exports = userRouter;

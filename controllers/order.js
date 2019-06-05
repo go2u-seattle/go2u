@@ -8,11 +8,16 @@
 
 */
 
-
 // modules
+const auth = require('../middleware/auth');
 const { Order, validateOrder } = require('./../models/order');
 const { User } = require('./../models/user');
 const uuidv1 = require('uuid/v1');
+const fawn = require('fawn');
+
+const mongoose =require('mongoose');
+
+fawn.init(mongoose);
 
 // Handle get all groups
 exports.getAll = function (req, res) {
@@ -66,6 +71,8 @@ exports.put = async function (req, res) {
 
 // Handle post
 exports.post = async function (req, res) {
+    // authorization
+
     // vallidation input 
     const { error } = validateOrder(req.body);
     if (error) return res.status(404).send(error.details[0].message);
@@ -75,11 +82,7 @@ exports.post = async function (req, res) {
 
     // check available order count'
     // transaction? 
-    if (user.onGoingOrderCount < 5) {
-
-    } else {
-
-    }
+    if (user.onGoindOrderCount >= 5) return res.status(400).sned('Number of the posted order exceeds 5');
     var order = new Order({
         _id: uuidv1(),
         userId: user._id,
@@ -89,6 +92,19 @@ exports.post = async function (req, res) {
         orderDescription: req.body.orderDescription,
         preferredDeliveryMethodType: req.body.preferredDeliveryMethodType,
         orderCreationTime: Date.now(),
-    }).save();
-    res.status(201).send(order);
+    });
+    
+    try {
+        new Fawn.task()
+        .save('order-collection', order)
+        .update('user-collection', { _id: user._id }, { 
+            $inc: { onGoindOrderCount: 1 }
+         })
+        .run();
+        
+        res.send(order);
+    }
+    catch(ex) {
+        res.status(500).send('Something failed.');
+    }
 };

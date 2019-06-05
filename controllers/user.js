@@ -1,11 +1,12 @@
 'use strict';
 
 // modules
-const mongoose = require('mongoose');
+
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const { User, validate } = require('../models/user');
 const uuidv1 = require('uuid/v1');
+
 
 // Handle post
 exports.post = async function (req, res) {
@@ -28,9 +29,10 @@ exports.post = async function (req, res) {
   });
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt); // use await because we want to use promise
-
   await user.save();
-  res.send(_.pick(user, ['_id', 'name', 'email']));
+
+  const token = user.generateAuthToken();
+  res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email'])); // we should return response json headers
 };
 
 // Handle get all users
