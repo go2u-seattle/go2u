@@ -3,7 +3,6 @@
 // packages
 var express = require('express');
 const auth = require('../middleware/auth');
-
 // modules
 var bidController = require('../controllers/bid');
 

@@ -13,7 +13,7 @@ var userRouter = express.Router()
     .get('/', userController.getAll)
     .get('/:id', userController.getByUserId)
     .delete('/:id', [auth, admin], userController.deleteByUserId)
-    .post('/', auth, userController.post)
+    .post('/', userController.post)
     .put('/:id', auth, userController.put);
 
 module.exports = userRouter;

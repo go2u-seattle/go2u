@@ -20,9 +20,10 @@
   "dependencies": {
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
-    "expo-server-sdk": "^3.3.0",
     "config": "^3.1.0",
+    "expo-server-sdk": "^3.3.0",
     "express": "^4.16.4",
+    "express-async-errors": "^3.1.1",
     "fawn": "^2.1.5",
     "joi": "^14.3.1",
     "joi-objectid": "^2.0.0",
@@ -33,6 +34,8 @@
     "mongoose": "^5.4.20",
     "redis": "^2.8.0",
     "socket.io": "^2.2.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "winston": "^3.2.1",
+    "winston-mongodb": "^3.0.0"
   }
 }

@@ -4,6 +4,7 @@
 var express = require('express');
 
 // modules
+const error = require('./../middleware/error');
 var orderRoutes = require('./order');
 var userRoutes = require('./user');
 var goerRoutes = require('./goer');
@@ -23,6 +24,7 @@ var router = express.Router()
     .use('/paymentInformation', paymentInformationRoutes)
     .use('/paymentRecord', paymentRecordRoutes)
     .use('/review', reviewRoutes)  
-    .use('/auth', authRoutes);
-    
+    .use('/auth', authRoutes)
+    .use(error);
+
 module.exports = router;

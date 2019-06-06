@@ -1,11 +1,11 @@
-
+const asyncMiddleware = require('../middleware/async');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const {User} = require('../models/user');
 
 
-exports.post = async function (req, res) {
+exports.post = asyncMiddleware(async (req, res) => {
   // to make sure we have given email.
   const { error } = validate(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
@@ -19,7 +19,7 @@ exports.post = async function (req, res) {
 
   const token = user.generateAuthToken();
   res.send(token);
-}
+})
 
 // information expert principle 
 // object that has enough information that expert hsould have knowledge to do
