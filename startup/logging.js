@@ -1,9 +1,10 @@
+
 require('express-async-errors');
 const winston = require('winston'); // default logger;
 
 
 module.exports = function() {
-  winston.handleExceptions(
+  winston.exceptions.handle(
     new winston.transports.Console({format: winston.format.combine(
       winston.format.colorize(),
       winston.format.simple()

@@ -11,7 +11,7 @@ var goerRouter = express.Router()
     .get('/', goerController.getAll)
     .get('/:id', auth, goerController.getById) // goerId or userId?
     .delete('/:id', auth, goerController.deleteById)
-    .post('/', auth, goerController.post)
+    .post('/', goerController.post)
     .put('/:id', auth, goerController.put);
 
 module.exports = goerRouter;

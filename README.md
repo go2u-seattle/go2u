@@ -24,6 +24,7 @@ Alternately, to quickly try out this repo in the cloud, you can [![Remix on Glit
 - [expressjs](https://github.com/expressjs/express) - The server for handling and routing HTTP requests
 - [mongoose](https://github.com/Automattic/mongoose) - For modeling and mapping MongoDB data to javascript 
 - [google](www.google.com) - 
+- [jest] for unit/integration testing (npm i jest --save-dev)
 
 ## Application Structure
 
@@ -43,4 +44,16 @@ Requests are authenticated using the `Authorization` header with a valid JWT. We
 
 <br />
 
-[![Brought to you by Thinkster](https://raw.githubusercontent.com/gothinkster/realworld/master/media/end.png)](https://thinkster.io)
+
+
+# To do:
+- unit-testing:
+  - Any functions without external depdencies such as generateAuthToken function
+- Integration Testing:
+  - user:
+    - testing object
+    - testing exceptions
+      1. Post with wrong values [null, undefined, NaN, '', 0, false] for (id, name, email, password, phone, loginType, priflePicture)
+      2. getByUserId with null values [null, undefined, NaN, '', 0, false]
+      3. getAll with empty results, returning values.
+      4. 

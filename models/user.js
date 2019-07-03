@@ -1,16 +1,15 @@
-'use strict';
+"use strict";
 
 // packages
-var mongoose = require('mongoose');
-const Joi = require('joi');
-const jwt = require('jsonwebtoken');
-const config = require('config');
+var mongoose = require("mongoose");
+const Joi = require("joi");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
 // constants
-var userCollectionName = 'user-collection';
-var userModelName = 'User';
-const uuidv1 = require('uuid/v1');
-
+var userCollectionName = "user-collection";
+var userModelName = "User";
+const uuidv1 = require("uuid/v1");
 
 // var LoginType = {
 //   FACEBOOK: 1,
@@ -27,6 +26,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: uuidv1()
   },
+  username: String,
   isAdmin: Boolean,
   pushToken: {
     type: String,
@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
   name: {
     lastName: String,
     middleName: String,
-    firstName: String,
+    firstName: String
   },
   email: {
     type: String,
@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema({
   loginType: String,
 
   // we just need to concern  with url's that point to an image location endpoint, and client will resolves to retrieving data from MongoDB  or S3.
-  // let the brower fetch the image. 
+  // let the brower fetch the image.
   // best solution is to upload to Amazon S3 and save the ID dirextly in MongoDB (document)
   profilePicture: {
     type: String,
@@ -80,9 +80,17 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.generateAuthToken = function() {
   // we put payload  then second arg is secret key. just hardcoding now put
-  const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('jwtPrivateKey')); // we'ill get a token;
+  const token = jwt.sign(
+    {
+      _id: this._id,
+      firstName: this.name.firstName,
+      lastName: this.name.lastName,
+      email: this.email
+    },
+    config.get("jwtPrivateKey")
+  ); // we'ill get a token;
   return token;
-}
+};
 
 const User = mongoose.model(userModelName, userSchema, userCollectionName);
 
@@ -94,8 +102,10 @@ function validateUser(user) {
     required: Joi.boolean().default(false)
   });
   const phoneSchema = Joi.object({
-    number: Joi.string().regex(/^\d{3}-\d{3}-\d{4}$/).required(),
-    isVerified: Joi.boolean().required()
+    number: Joi.string()
+      .regex(/^\d{3}-\d{3}-\d{4}$/)
+      .required(),
+    isVerified: Joi.boolean()
   });
 
   const schema = {
@@ -110,7 +120,10 @@ function validateUser(user) {
     loginType: Joi.string(),
     // loginType: Joi.any().valid(LoginType).required(),
     priflePicture: Joi.string(),
-    onGoingOrderCount: Joi.number().positive().max(5).integer()
+    onGoingOrderCount: Joi.number()
+      .positive()
+      .max(5)
+      .integer()
   };
 
   return Joi.validate(user, schema);

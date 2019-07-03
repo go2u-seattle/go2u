@@ -7,10 +7,10 @@ const auth = require('../middleware/auth');
 var bidController = require('../controllers/bid');
 
 var bidRouter = express.Router()
-    .get('/goer/', auth, bidController.getAllBidsByGoerId)
+    .get('/goer/', bidController.getAllBidsByGoerId)
     .get('/order/:orderId', auth, bidController.getAllBidsByOrderId)
     .delete('/:goerId', auth, bidController.deleteById)
-    .post('/', auth, bidController.post)
+    .post('/', bidController.post)
     .put('/:id', auth, bidController.put);
 
 
