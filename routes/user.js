@@ -12,7 +12,7 @@ var userRouter = express
   .Router()
   .get("/", userController.getAll)
   .get("/:id", userController.getByUserId)
-  .delete("/:id", userController.deleteByUserId)
+  .delete("/:id", auth, userController.deleteByUserId)
   .post("/", userController.post)
   .put("/:id", auth, userController.put);
 
