@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/go2u-seattle/go2u#readme",
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "config": "^3.1.0",
     "expo-server-sdk": "^3.3.0",
